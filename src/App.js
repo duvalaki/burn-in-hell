@@ -3,6 +3,7 @@ import "./App.css";
 import f1Url from "./f1.png";
 import { useState, useEffect } from "react";
 import * as PIXI from "pixi.js";
+import sound from "./campfire-1.mp3";
 
 let app = new PIXI.Application({
   width: window.innerWidth,
@@ -33,6 +34,7 @@ message.anchor.y = 0.5;
 message.x = window.innerWidth / 2;
 message.y = window.innerHeight / 2;
 
+
 let cat;
 function setup(x, y) {
   //Create the cat sprite
@@ -44,6 +46,9 @@ function setup(x, y) {
   cat.y = y;
   app.stage.addChild(cat);
   app.render();
+
+  var audio = new Audio(sound);
+  audio.play();
 }
 
 function App() {
