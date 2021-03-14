@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import * as PIXI from "pixi.js";
 
 let app = new PIXI.Application({
-  width: 256,
-  height: 256,
+  width: window.innerWidth,
+  height: window.innerHeight,
   antialias: true,
   transparent: false,
   resolution: 1,
@@ -18,29 +18,46 @@ app.loader
       url: f1Url,
     },
   ])
-  .load(() => setup());
-app.renderer.plugins.interaction.on("pointerdown", (event) => {});
+  .load(() => console.log("LOADED"));
+app.renderer.plugins.interaction.on("pointerdown", (event) => {
+  let coords = event.data.getLocalPosition(app.stage);
+  setup(coords.x, coords.y);
+});
+app.renderer.backgroundColor = 0x5fddff;
 
 let background = new PIXI.Graphics();
 let message = new PIXI.Text("Hello Pixi!");
+// message.anchor = 0.5;
+message.anchor.x = 0.5;
+message.anchor.y = 0.5;
+message.x = window.innerWidth / 2;
+message.y = window.innerHeight / 2;
 
-function setup() {
+let cat;
+function setup(x, y) {
   //Create the cat sprite
-  let cat = new PIXI.Sprite(app.loader.resources.f1.texture);
+  cat = new PIXI.Sprite(app.loader.resources.f1.texture);
   //Add the cat to the stage
+  cat.anchor.x = 0.5;
+  cat.anchor.y = 0.5;
+  cat.x = x;
+  cat.y = y;
   app.stage.addChild(cat);
+  app.render();
 }
 
 function App() {
   const [text, setText] = useState("Some cool text");
   useEffect(() => {
+    console.log("effect");
     document.body.appendChild(app.view);
     background.beginFill(0x5fddff);
     background.drawRect(0, 0, 256, 256);
-    background.interactive = true;
-    background.mousedown = (e) => {
-      console.log("background", e);
-    };
+    // background.interactive = true;
+    // background.mousedown = (e) => {
+    //   console.log("background", e);
+    //   setup(20, 20);
+    // };
     app.stage.addChild(background);
     app.stage.addChild(message);
   }, []);
