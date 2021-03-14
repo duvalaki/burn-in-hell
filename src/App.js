@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import f1Url from "./f1.png";
 import f2Url from "./f2.png";
@@ -21,7 +20,7 @@ function randomIntFromInterval(min, max) {
 
 let app = new PIXI.Application({
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight - 50,
   antialias: true,
   transparent: false,
   resolution: 1,
@@ -52,9 +51,7 @@ app.renderer.plugins.interaction.on("pointerdown", (event) => {
 });
 app.renderer.backgroundColor = 0xffffff;
 
-let background = new PIXI.Graphics();
-let message = new PIXI.Text("Hello Pixi!");
-// message.anchor = 0.5;
+let message = new PIXI.Text("");
 message.anchor.x = 0.5;
 message.anchor.y = 0.5;
 message.x = window.innerWidth / 2;
@@ -109,15 +106,10 @@ function setup(x, y) {
   audio2.play();
 }
 
-let cosBase = 0;
 function App() {
   const [text, setText] = useState("Some cool text");
   useEffect(() => {
-    console.log("effect");
-    document.body.appendChild(app.view);
-    background.beginFill(0x5fddff);
-    background.drawRect(0, 0, 256, 256);
-    // app.stage.addChild(background);
+    document.getElementById("canva").appendChild(app.view);
     app.stage.addChild(message);
 
     app.ticker.add((delta) => {
@@ -131,23 +123,15 @@ function App() {
 
   message.text = text;
   return (
-    <div className="App" tabIndex="-1">
-      {/* <button
-        onClick={(e) => {
-          console.log(e);
-          console.log(document.getElementById("mytext"));
-          document.getElementById("mytext").focus();
-        }}
-      >
-        Activate Lasers
-      </button> */}
+    <div className="App">
       <input
-        tabIndex="-1"
         type="text"
         id="mytext"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+      <div id="canva" />
+      {/* <button onClick={() => console.log("HELO")}>{"/endrage"}</button> */}
     </div>
   );
 }
