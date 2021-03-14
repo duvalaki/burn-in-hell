@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
+import f1Url from "./f1.png";
 import { useState, useEffect } from "react";
 import * as PIXI from "pixi.js";
 
@@ -10,12 +11,25 @@ let app = new PIXI.Application({
   transparent: false,
   resolution: 1,
 });
-app.renderer.plugins.interaction.on("pointerdown", (event) => {
-  console.log(event.data.global);
-});
+app.loader
+  .add([
+    {
+      name: "f1",
+      url: f1Url,
+    },
+  ])
+  .load(() => setup());
+app.renderer.plugins.interaction.on("pointerdown", (event) => {});
 
 let background = new PIXI.Graphics();
 let message = new PIXI.Text("Hello Pixi!");
+
+function setup() {
+  //Create the cat sprite
+  let cat = new PIXI.Sprite(app.loader.resources.f1.texture);
+  //Add the cat to the stage
+  app.stage.addChild(cat);
+}
 
 function App() {
   const [text, setText] = useState("Some cool text");
@@ -32,7 +46,6 @@ function App() {
   }, []);
 
   message.text = text;
-  console.log(app.renderer.view.getContext("2d"));
   return (
     <div className="App" tabIndex="-1">
       <button
