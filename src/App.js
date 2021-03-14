@@ -82,8 +82,7 @@ function setup(x, y) {
       break;
   }
   //Add the cat to the stage
-  cat.height = 100;
-  cat.width = cat.anchor.x = 0.5;
+  cat.anchor.x = 0.5;
   cat.anchor.y = 0.5;
   cat.x = x;
   cat.y = y;
