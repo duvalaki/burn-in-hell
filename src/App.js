@@ -87,7 +87,7 @@ function setup(x, y) {
       cat = new PIXI.Sprite(app.loader.resources.f1.texture);
       break;
   }
-  cat.alpha = 0.1;
+  cat.alpha = randomNumber (0.1, 0.7);
   //Add the cat to the stage
   cat.anchor.x = 0.5;
   cat.anchor.y = 0.5;
