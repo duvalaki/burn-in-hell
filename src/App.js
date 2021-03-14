@@ -7,6 +7,8 @@ import f4Url from "./f4.png";
 import { useState, useEffect } from "react";
 import * as PIXI from "pixi.js";
 import sound from "./campfire-1.mp3";
+import laser from "./laser.mp3";
+
 
 function randomNumber(min, max) {
   // min and max included
@@ -95,8 +97,11 @@ function setup(x, y) {
   app.stage.addChild(cat);
   app.render();
 
-  var audio = new Audio(sound);
+  var audio = new Audio(laser);
   audio.play();
+
+  var audio2 = new Audio(sound);
+  audio2.play();
 }
 
 let cosBase = 0;
