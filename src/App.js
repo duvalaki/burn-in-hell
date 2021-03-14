@@ -1,9 +1,22 @@
 import logo from "./logo.svg";
 import "./App.css";
 import f1Url from "./f1.png";
+import f2Url from "./f2.png";
+import f3Url from "./f3.png";
+import f4Url from "./f4.png";
 import { useState, useEffect } from "react";
 import * as PIXI from "pixi.js";
 import sound from "./campfire-1.mp3";
+
+function randomNumber(min, max) {
+  // min and max included
+  return Math.random() * (max - min + 1) + min;
+}
+
+function randomIntFromInterval(min, max) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 let app = new PIXI.Application({
   width: window.innerWidth,
@@ -17,6 +30,18 @@ app.loader
     {
       name: "f1",
       url: f1Url,
+    },
+    {
+      name: "f2",
+      url: f2Url,
+    },
+    {
+      name: "f3",
+      url: f3Url,
+    },
+    {
+      name: "f4",
+      url: f4Url,
     },
   ])
   .load(() => console.log("LOADED"));
@@ -35,16 +60,39 @@ message.x = window.innerWidth / 2;
 message.y = window.innerHeight / 2;
 
 let fires = [];
-let cat;
 function setup(x, y) {
   //Create the cat sprite
-  cat = new PIXI.Sprite(app.loader.resources.f1.texture);
+  let cat;
+  let random = randomIntFromInterval(1, 4);
+  switch (random) {
+    case 1:
+      cat = new PIXI.Sprite(app.loader.resources.f1.texture);
+      break;
+    case 2:
+      cat = new PIXI.Sprite(app.loader.resources.f2.texture);
+      break;
+    case 3:
+      cat = new PIXI.Sprite(app.loader.resources.f3.texture);
+      break;
+    case 4:
+      cat = new PIXI.Sprite(app.loader.resources.f4.texture);
+      break;
+    default:
+      cat = new PIXI.Sprite(app.loader.resources.f4.texture);
+      break;
+  }
   //Add the cat to the stage
-  cat.anchor.x = 0.5;
+  cat.height = 100;
+  cat.width = cat.anchor.x = 0.5;
   cat.anchor.y = 0.5;
   cat.x = x;
   cat.y = y;
-  fires.push(cat);
+  let c = randomNumber(Math.PI / 4, (Math.PI * 3) / 4);
+  cat.rotation = (Math.cos(c) * Math.PI) / 4;
+  fires.push({
+    cosBase: c,
+    fire: cat,
+  });
   app.stage.addChild(cat);
   app.render();
 
@@ -53,7 +101,6 @@ function setup(x, y) {
 }
 
 let cosBase = 0;
-console.log(Math.cos(2 * Math.PI), Math.cos(0));
 function App() {
   const [text, setText] = useState("Some cool text");
   useEffect(() => {
@@ -65,18 +112,11 @@ function App() {
     app.stage.addChild(message);
 
     app.ticker.add((delta) => {
-      // just for fun, let's rotate mr rabbit a little
-      // delta is 1 if running at 100% performance
-      // creates frame-independent transformation
-      //console.log(Math.cos(delta));
-      cosBase += 0.01 * delta;
-      if (cosBase > 2 * Math.PI) cosBase = 0;
-      message.rotation = (Math.cos(cosBase) * Math.PI) / 4;
-      for (let fire of fires) {
-        fire.rotation = (Math.cos(cosBase) * Math.PI) / 4;
+      for (let info of fires) {
+        info.cosBase += 0.01 * delta;
+        if (info.cosBase > 2 * Math.PI) info.cosBase = 0;
+        info.fire.rotation = (Math.cos(info.cosBase) * Math.PI) / 4;
       }
-      // console.log(Math.cos(cosBase));
-      // message.rotation += 0.1 * delta;
     });
   }, []);
 
