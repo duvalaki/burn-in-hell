@@ -9,10 +9,9 @@ import * as PIXI from "pixi.js";
 import sound from "./campfire-1.mp3";
 import laser from "./laser.mp3";
 
-
 function randomNumber(min, max) {
   // min and max included
-  return Math.random() * (max - min + 1) + min;
+  return Math.random() * (max - min) + min;
 }
 
 function randomIntFromInterval(min, max) {
@@ -51,7 +50,7 @@ app.renderer.plugins.interaction.on("pointerdown", (event) => {
   let coords = event.data.getLocalPosition(app.stage);
   setup(coords.x, coords.y);
 });
-app.renderer.backgroundColor = 0x5fddff;
+app.renderer.backgroundColor = 0xffffff;
 
 let background = new PIXI.Graphics();
 let message = new PIXI.Text("Hello Pixi!");
@@ -69,20 +68,26 @@ function setup(x, y) {
   switch (random) {
     case 1:
       cat = new PIXI.Sprite(app.loader.resources.f1.texture);
+      cat.scale.x = cat.scale.y = randomNumber(0.6, 0.8);
       break;
     case 2:
+      console.log(randomNumber(0.2, 0.4));
       cat = new PIXI.Sprite(app.loader.resources.f2.texture);
+      cat.scale.x = cat.scale.y = randomNumber(0.2, 0.4);
       break;
     case 3:
       cat = new PIXI.Sprite(app.loader.resources.f3.texture);
+      cat.scale.x = cat.scale.y = randomNumber(0.2, 0.4);
       break;
     case 4:
       cat = new PIXI.Sprite(app.loader.resources.f4.texture);
+      cat.scale.x = cat.scale.y = randomNumber(0.2, 0.4);
       break;
     default:
-      cat = new PIXI.Sprite(app.loader.resources.f4.texture);
+      cat = new PIXI.Sprite(app.loader.resources.f1.texture);
       break;
   }
+  cat.alpha = 0.1;
   //Add the cat to the stage
   cat.anchor.x = 0.5;
   cat.anchor.y = 0.5;
@@ -112,7 +117,7 @@ function App() {
     document.body.appendChild(app.view);
     background.beginFill(0x5fddff);
     background.drawRect(0, 0, 256, 256);
-    app.stage.addChild(background);
+    // app.stage.addChild(background);
     app.stage.addChild(message);
 
     app.ticker.add((delta) => {
@@ -127,7 +132,7 @@ function App() {
   message.text = text;
   return (
     <div className="App" tabIndex="-1">
-      <button
+      {/* <button
         onClick={(e) => {
           console.log(e);
           console.log(document.getElementById("mytext"));
@@ -135,7 +140,7 @@ function App() {
         }}
       >
         Activate Lasers
-      </button>
+      </button> */}
       <input
         tabIndex="-1"
         type="text"
